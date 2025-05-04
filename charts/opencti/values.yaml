@@ -49,7 +49,7 @@ testConnection: false
 # </br> Ref: https://docs.opencti.io/latest/deployment/configuration/#platform
 env:
   # APP OPENCTI
-  APP__BASE_URL: "https://opencti.n0cloud.org"
+  #APP__BASE_URL: "https://opencti.n0cloud.org"
   APP__ADMIN__EMAIL: <path:kv/kubernetes/data/opencti/#app-admin-email>
   APP__ADMIN__PASSWORD: <path:kv/kubernetes/data/opencti/#app-admin-password>
   APP__ADMIN__TOKEN: <path:kv/kubernetes/data/opencti/#app-admin-token>
@@ -59,11 +59,11 @@ env:
   NODE_OPTIONS: "--max-old-space-size=8096"
   PROVIDERS__LOCAL__STRATEGY: LocalStrategy
   # MINIO
-  MINIO__ENDPOINT: opencti-minio
-  MINIO__PORT: 9000
-  MINIO__ACCESS_KEY: <path:kv/kubernetes/data/opencti/#minio-access-key>
-  MINIO__SECRET_KEY: <path:kv/kubernetes/data/opencti/#minio-secret-key>
-  MINIO__USE_SSL: false
+  MINIO__ENDPOINT: opencti-minio:9000
+  #MINIO__PORT: 9000
+  #MINIO__ACCESS_KEY: <path:kv/kubernetes/data/opencti/#minio-access-key>
+  #MINIO__SECRET_KEY: <path:kv/kubernetes/data/opencti/#minio-secret-key>
+  #MINIO__USE_SSL: false
   # ELASTICSEARCH
   ELASTICSEARCH__URL: http://opencti-elasticsearch:9200
   # RABBITMQ

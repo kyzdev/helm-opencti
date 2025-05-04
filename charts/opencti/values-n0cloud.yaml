@@ -49,31 +49,36 @@ testConnection: false
 # </br> Ref: https://docs.opencti.io/latest/deployment/configuration/#platform
 env:
   # APP OPENCTI
-  APP__ADMIN__EMAIL: admin@opencti.io
-  APP__ADMIN__PASSWORD: ChangeMe
-  APP__ADMIN__TOKEN: ChangeMe
+  #APP__BASE_URL: "https://opencti.n0cloud.org"
+  APP__ADMIN__EMAIL: admin@n0cloud.org
+  APP__ADMIN__PASSWORD: <path:kv/kubernetes/data/opencti/#app-admin-password>
+  APP__ADMIN__TOKEN: <path:kv/kubernetes/data/opencti/#app-admin-token>
   APP__BASE_PATH: "/"
   APP__GRAPHQL__PLAYGROUND__ENABLED: false
   APP__GRAPHQL__PLAYGROUND__FORCE_DISABLED_INTROSPECTION: false
   NODE_OPTIONS: "--max-old-space-size=8096"
   PROVIDERS__LOCAL__STRATEGY: LocalStrategy
   # MINIO
-  MINIO__ENDPOINT: release-name-minio:9000
+  MINIO__ENDPOINT: opencti-minio:9000
+  #MINIO__PORT: 9000
+  #MINIO__ACCESS_KEY: <path:kv/kubernetes/data/opencti/#minio-access-key>
+  #MINIO__SECRET_KEY: <path:kv/kubernetes/data/opencti/#minio-secret-key>
+  #MINIO__USE_SSL: false
   # ELASTICSEARCH
-  ELASTICSEARCH__URL: http://release-name-elasticsearch:9200
+  ELASTICSEARCH__URL: http://opencti-elasticsearch:9200
   # RABBITMQ
-  RABBITMQ__HOSTNAME: release-name-rabbitmq
+  RABBITMQ__HOSTNAME: opencti-rabbitmq
   RABBITMQ__PORT_MANAGEMENT: 15672
   RABBITMQ__PORT: 5672
   RABBITMQ__USERNAME: user
-  RABBITMQ__PASSWORD: ChangeMe
+  RABBITMQ__PASSWORD: <path:kv/kubernetes/data/opencti/#rabbitmq-password>
   # REDIS
-  REDIS__HOSTNAME: release-name-redis-master
+  REDIS__HOSTNAME: opencti-redis-master
   REDIS__PORT: 6379
   REDIS__MODE: single
   # METRICS AND HEALTHCHECK
   APP__TELEMETRY__METRICS__ENABLED: true
-  APP__HEALTH_ACCESS_KEY: ChangeMe
+  APP__HEALTH_ACCESS_KEY: <path:kv/kubernetes/data/opencti/#app-health-access-key>
 
 # -- Variables from configMap
 envFromConfigMap: {}
@@ -329,30 +334,33 @@ securityContext: {}
 # -- Ingress configuration to expose app
 # </br> Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
+  enabled: true
+  className: "nginx"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.org/redirect-to-https: "true"
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: chart-example.local
+    - host: opencti.n0cloud.org
       paths:
         - path: /
           pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  tls:
+    - secretName: opencti-tls
+      hosts:
+        - opencti.n0cloud.org
 
 # -- The resources limits and requested
 # </br> Ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-resources: {}
-  # limits:
-  #   cpu: "1500m"
-  #   memory: 2048Mi
-  # requests:
-  #   cpu: 1
-  #   memory: 256Mi
+resources: 
+  limits:
+    cpu: "1500m"
+    memory: 2048Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
 
 # -- Pod Disruption Budget
 # </br> Ref: https://kubernetes.io/docs/reference/kubernetes-api/policy-resources/pod-disruption-budget-v1/
@@ -843,7 +851,7 @@ elasticsearch:
   # Extra variables
   extraEnvVars:
     - name: ES_JAVA_OPTS
-      value: "-Xms512M -Xmx512M"
+      value: "-Xms2G -Xmx2G"
 
   # Master-eligible nodes parameters
   master:
@@ -856,6 +864,13 @@ elasticsearch:
     persistence:
       # Enable persistence using a `PersistentVolumeClaim`
       enabled: false
+    resources:
+      limits:
+        cpu: 1
+        memory: 4Gi
+      requests:
+        cpu: 500m
+        memory: 2Gi
 
   # Data-only nodes parameters
   data:
@@ -867,6 +882,13 @@ elasticsearch:
     persistence:
       # Enable persistence using a `PersistentVolumeClaim`
       enabled: false
+    resources:
+      limits:
+        cpu: 1
+        memory: 4Gi
+      requests:
+        cpu: 500m
+        memory: 2Gi
 
   # Ingest-only nodes parameters
   ingest:
@@ -891,9 +913,9 @@ minio:
   # Minio authentication parameters
   auth:
     # Minio root username
-    rootUser: ChangeMe
+    rootUser: <path:kv/kubernetes/data/opencti/#minio-access-key>
     # Password for Minio root user
-    rootPassword: ChangeMe
+    rootPassword: <path:kv/kubernetes/data/opencti/#minio-secret-key>
 
   # Enable persistence using Persistent Volume Claims
   # </br> Ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -922,8 +944,8 @@ rabbitmq:
     username: user
     # RabbitMQ application password
     # </br> Ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
-    password: ChangeMe
-    erlangCookie: ChangeMe
+    password: <path:kv/kubernetes/data/opencti/#rabbitmq-password>
+    erlangCookie: <path:kv/kubernetes/data/opencti/#rabbitmq-cookie>
 
   # Persistence parameters
   persistence:

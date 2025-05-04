@@ -342,6 +342,7 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     ingress.kubernetes.io/ssl-redirect: "false"
     nginx.org/redirect-to-https: "true"
+    acme.cert-manager.io/http01-edit-in-place: "true"
     # kubernetes.io/tls-acme: "true"
   hosts:
     - host: opencti.n0cloud.org

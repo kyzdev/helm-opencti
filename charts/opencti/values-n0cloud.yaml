@@ -59,11 +59,12 @@ env:
   NODE_OPTIONS: "--max-old-space-size=8096"
   PROVIDERS__LOCAL__STRATEGY: LocalStrategy
   # MINIO
-  MINIO__ENDPOINT: opencti-minio:9000
+  MINIO__ENDPOINT: opencti-minio
+  MINIO__PORT: 9000
   #MINIO__PORT: 9000
   #MINIO__ACCESS_KEY: <path:kv/kubernetes/data/opencti/#minio-access-key>
   #MINIO__SECRET_KEY: <path:kv/kubernetes/data/opencti/#minio-secret-key>
-  #MINIO__USE_SSL: false
+  MINIO__USE_SSL: false
   # ELASTICSEARCH
   ELASTICSEARCH__URL: http://opencti-elasticsearch:9200
   # RABBITMQ

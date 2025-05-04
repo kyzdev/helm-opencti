@@ -50,7 +50,7 @@ testConnection: false
 env:
   # APP OPENCTI
   #APP__BASE_URL: "https://opencti.n0cloud.org"
-  APP__ADMIN__EMAIL: <path:kv/kubernetes/data/opencti/#app-admin-email>
+  APP__ADMIN__EMAIL: admin@n0cloud.org
   APP__ADMIN__PASSWORD: <path:kv/kubernetes/data/opencti/#app-admin-password>
   APP__ADMIN__TOKEN: <path:kv/kubernetes/data/opencti/#app-admin-token>
   APP__BASE_PATH: "/"

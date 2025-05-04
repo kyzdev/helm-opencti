@@ -878,9 +878,9 @@ minio:
   # Minio authentication parameters
   auth:
     # Minio root username
-    rootUser: f42e3b1c-9d61-4c65-bdf9-1e2770ec3c99
+    rootUser: <path:kv/kubernetes/data/opencti/#minio-access-key>
     # Password for Minio root user
-    rootPassword: ecf55b54-3212-49e0-b03e-2331071fc0fd
+    rootPassword: <path:kv/kubernetes/data/opencti/#minio-secret-key>
 
   # Enable persistence using Persistent Volume Claims
   # </br> Ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -909,8 +909,8 @@ rabbitmq:
     username: user
     # RabbitMQ application password
     # </br> Ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
-    password: e24b84b1-9cee-4062-87a7-d5030ceb89f0
-    erlangCookie: f6f0fb53-aba7-4c2f-bb4e-8a1f4316f3c1
+    password: <path:kv/kubernetes/data/opencti/#rabbitmq-password>
+    erlangCookie: <path:kv/kubernetes/data/opencti/#rabbitmq-cookie>
 
   # Persistence parameters
   persistence:
